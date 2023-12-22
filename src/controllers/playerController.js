@@ -1,64 +1,54 @@
+// playerController.js
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 const Player = require("../models/playerModel");
 
-const addPlayer = async (req, res) => {
+const registerPlayer = async (req, res) => {
   try {
-    const newPlayer = new Player(req.body);
+    const { name, email, password } = req.body;
+
+    // Hash the password
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const newPlayer = new Player({
+      name,
+      email,
+      password: hashedPassword,
+    });
+
     await newPlayer.save();
-    res.json({ message: "Player added successfully", player: newPlayer });
+
+    res.json({ message: "Player registered successfully", playerId: newPlayer._id });
   } catch (error) {
-    res
-      .status(500)
-      .json({ message: "Failed to add player", error: error.message });
+    res.status(500).json({ message: "Failed to register player", error: error.message });
   }
 };
 
-const getPlayers = async (req, res) => {
+const loginPlayer = async (req, res) => {
   try {
-    const players = await Player.find().populate("team", "name");
-    res.json(players);
-  } catch (error) {
-    res
-      .status(500)
-      .json({ message: "Internal Server Error", error: error.message });
-  }
-};
+    const { name, password } = req.body;
 
-const updatePlayer = async (req, res) => {
-  try {
-    const playerId = req.params.id;
-    const updatedPlayer = await Player.findByIdAndUpdate(
-      playerId,
-      req.body,
-      { new: true }
-    );
+    // Find the player by name
+    const player = await Player.findOne({ name });
 
-    if (!updatedPlayer) {
-      return res.status(404).json({ message: "Player not found" });
+    if (!player) {
+      return res.status(401).json({ message: "Invalid credentials" });
     }
 
-    res.json({ message: "Player updated successfully", player: updatedPlayer });
-  } catch (error) {
-    res
-      .status(500)
-      .json({ message: "Failed to update player", error: error.message });
-  }
-};
+    // Compare the entered password with the stored hashed password
+    const isPasswordValid = await bcrypt.compare(password, player.password);
 
-const deletePlayer = async (req, res) => {
-  try {
-    const playerId = req.params.id;
-    const deletedPlayer = await Player.findByIdAndDelete(playerId);
-
-    if (!deletedPlayer) {
-      return res.status(404).json({ message: "Player not found" });
+    if (!isPasswordValid) {
+      return res.status(401).json({ message: "Invalid credentials" });
     }
 
-    res.json({ message: "Player deleted successfully", player: deletedPlayer });
+    // Generate a JWT token for authentication
+    const token = jwt.sign({ playerId: player._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
+
+    res.json({ message: "Player logged in successfully", token });
   } catch (error) {
-    res
-      .status(500)
-      .json({ message: "Failed to delete player", error: error.message });
+    res.status(500).json({ message: "Failed to login player", error: error.message });
   }
 };
 
-module.exports = { addPlayer, getPlayers, updatePlayer, deletePlayer };
+module.exports = { registerPlayer, loginPlayer };

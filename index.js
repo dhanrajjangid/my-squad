@@ -2,8 +2,6 @@ const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const cors = require("cors");
-const userRoutes = require("./src/routes/userRoutes");
-const hotelRoutes = require("./src/routes/hotelRoutes");
 const playerRoutes = require("./src/routes/playerRoutes");
 const teamRoutes = require("./src/routes/teamRoutes");
 
@@ -26,8 +24,6 @@ app.use(bodyParser.json());
 app.use(cors());
 
 // Routes
-app.use("/users", userRoutes);
-app.use("/hotel", hotelRoutes);
 app.use("/players", playerRoutes);
 app.use("/teams", teamRoutes);
 

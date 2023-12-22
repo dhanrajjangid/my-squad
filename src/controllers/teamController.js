@@ -2,7 +2,20 @@ const Team = require("../models/teamModel");
 
 const addTeam = async (req, res) => {
   try {
-    const newTeam = new Team(req.body);
+    const { name, overall_rating, category, players, location } = req.body;
+
+    // Ensure location is provided as [longitude, latitude]
+    const newTeam = new Team({
+      name,
+      overall_rating,
+      players,
+      category,
+      location: {
+        type: "Point",
+        coordinates: location,
+      },
+    });
+
     await newTeam.save();
     res.json({ message: "Team added successfully", team: newTeam });
   } catch (error) {

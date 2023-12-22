@@ -8,9 +8,23 @@ const playerSchema = new mongoose.Schema({
 const footballTeamSchema = new mongoose.Schema({
   name: { type: String, required: true },
   overall_rating: { type: Number, required: true },
+  category: { type: String, required: true },
   players: [playerSchema],
+  location: {
+    type: {
+      type: String,
+      enum: ["Point"],
+      default: "Point",
+    },
+    coordinates: {
+      type: [Number],
+      required: true,
+    },
+  },
 });
 
-const FootballTeam = mongoose.model("FootballTeam", footballTeamSchema);
+footballTeamSchema.index({ location: "2dsphere" });
 
-module.exports = FootballTeam;
+const Team = mongoose.model("FootballTeam", footballTeamSchema);
+
+module.exports = Team;
