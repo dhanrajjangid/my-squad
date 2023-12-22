@@ -9,8 +9,8 @@ const footballTeamSchema = new mongoose.Schema({
   name: { type: String, required: true },
   overall_rating: { type: Number, required: true },
   category: { type: String, required: true },
-  players: [playerSchema],
   city: { type: String, required: true },
+  players: [playerSchema],
   location: {
     type: {
       type: String,
