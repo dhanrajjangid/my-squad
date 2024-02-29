@@ -1,48 +1,6 @@
 // playerController.js
 const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
 const Player = require("../models/playerModel");
-
-// Create (POST)
-const createPlayer = async (req, res) => {
-  try {
-    const {
-      name,
-      email,
-      password,
-      phoneNumber,
-      position,
-      state,
-      city,
-      currentLocation,
-    } = req.body;
-
-    // Hash the password
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    const newPlayer = new Player({
-      name,
-      email,
-      password: hashedPassword,
-      phoneNumber,
-      position,
-      state,
-      city,
-      currentLocation,
-    });
-
-    await newPlayer.save();
-
-    res.json({
-      message: "Player created successfully",
-      playerId: newPlayer._id,
-    });
-  } catch (error) {
-    res
-      .status(500)
-      .json({ message: "Failed to create player", error: error.message });
-  }
-};
 
 // Read (GET all players)
 const getAllPlayers = async (req, res) => {
@@ -81,18 +39,12 @@ const updatePlayer = async (req, res) => {
     const {
       name,
       email,
-      password,
       phoneNumber,
-      position,
       state,
       city,
       currentLocation,
     } = req.body;
 
-    // Hash the password if provided
-    const hashedPassword = password
-      ? await bcrypt.hash(password, 10)
-      : undefined;
 
     // Find the player by ID and update
     const updatedPlayer = await Player.findByIdAndUpdate(
@@ -101,9 +53,7 @@ const updatePlayer = async (req, res) => {
         $set: {
           name,
           email,
-          password: hashedPassword,
           phoneNumber,
-          position,
           state,
           city,
           currentLocation,
