@@ -3,7 +3,6 @@ const express = require("express");
 const router = express.Router();
 const authController = require("../controllers/authController");
 const playerController = require("../controllers/playerController");
-const searchPlayerController = require("../controllers/searchPlayerController");
 
 // CRUD operations with descriptive names
 router.get("/get-players", playerController.getAllPlayers);
@@ -14,8 +13,5 @@ router.delete("/delete-player/:id", playerController.deletePlayer);
 // Authentication routes (assuming authController has registerPlayer and loginPlayer functions)
 router.post("/register", authController.registerPlayer);
 router.post("/login", authController.loginPlayer);
-
-// Search players route
-router.get("/search-players", searchPlayerController.searchPlayers);
 
 module.exports = router;
