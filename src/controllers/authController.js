@@ -20,7 +20,7 @@ const registerPlayer = async (req, res) => {
 
     res.json({
       message: "Player registered successfully",
-      playerId: newPlayer._id,
+      data: {playerId: newPlayer._id},
     });
   } catch (error) {
     res
@@ -55,8 +55,7 @@ const loginPlayer = async (req, res) => {
     res.json({
       message: "Player logged in successfully",
       token,
-      email: player.email,
-      name: player.name,
+      data: { email: player.email, name: player.name },
     });
   } catch (error) {
     res
