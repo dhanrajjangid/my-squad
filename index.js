@@ -4,6 +4,8 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const playerRoutes = require("./src/routes/playerRoutes");
 const teamRoutes = require("./src/routes/teamRoutes");
+const locationRoutes = require("./src/routes/locationRoutes");
+
 
 require("dotenv").config(); // Load environment variables from .env
 
@@ -26,6 +28,7 @@ app.use(cors());
 // Routes
 app.use("/players", playerRoutes);
 app.use("/teams", teamRoutes);
+app.use("/location", locationRoutes);
 
 // Start the server
 app.listen(PORT, () => {
