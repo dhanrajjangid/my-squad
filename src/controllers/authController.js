@@ -31,10 +31,10 @@ const registerPlayer = async (req, res) => {
 
 const loginPlayer = async (req, res) => {
   try {
-    const { name, password } = req.body;
+    const { email, password } = req.body;
 
-    // Find the player by name
-    const player = await Player.findOne({ name });
+    // Find the player by email
+    const player = await Player.findOne({ email });
 
     if (!player) {
       return res.status(401).json({ message: "Invalid credentials" });
@@ -52,7 +52,12 @@ const loginPlayer = async (req, res) => {
       expiresIn: "1h",
     });
 
-    res.json({ message: "Player logged in successfully", token });
+    res.json({
+      message: "Player logged in successfully",
+      token,
+      email: player.email,
+      name: player.name,
+    });
   } catch (error) {
     res
       .status(500)
