@@ -6,7 +6,6 @@ const playerSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   phoneNumber: { type: String, default: "" },
-  position: { type: String, default: "" },
   state: { type: String, default: "" },
   city: { type: String, default: "" },
   currentLocation: {
@@ -23,6 +22,13 @@ const playerSchema = new mongoose.Schema({
 });
 
 playerSchema.index({ currentLocation: "2dsphere" });
+
+playerSchema.statics.updateLocation = async function (playerId, location) {
+  return this.findByIdAndUpdate(playerId, {
+    $set: { currentLocation: { type: "Point", coordinates: location } },
+  });
+};
+
 const Player = mongoose.model("Player", playerSchema);
 
 module.exports = Player;
