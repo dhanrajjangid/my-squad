@@ -54,7 +54,7 @@ const loginPlayer = async (req, res) => {
 
     res.json({
       message: "Player logged in successfully",
-      data: { email: player.email, name: player.name, token, },
+      data: { email: player.email, name: player.name, token, player_id: player },
     });
   } catch (error) {
     res
