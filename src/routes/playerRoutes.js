@@ -6,7 +6,6 @@ const playerController = require("../controllers/playerController");
 const searchPlayerController = require("../controllers/searchPlayerController");
 
 // CRUD operations with descriptive names
-router.post("/add-player", playerController.createPlayer);
 router.get("/get-players", playerController.getAllPlayers);
 router.get("/get-player/:id", playerController.getPlayerById);
 router.put("/update-player/:id", playerController.updatePlayer);
