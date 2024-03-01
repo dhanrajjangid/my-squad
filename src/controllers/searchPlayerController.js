@@ -4,7 +4,7 @@ const Player = require("../models/playerModel"); // Adjust the path based on you
 // Search players based on city, location, or category
 const searchPlayers = async (req, res) => {
   try {
-    const { latitude, longitude } = req.query;
+    const { latitude, longitude, distance } = req.query;
     let query = {};
 
     if (latitude && longitude) {
@@ -15,7 +15,7 @@ const searchPlayers = async (req, res) => {
             type: "Point",
             coordinates: [longitude, latitude],
           },
-          $maxDistance: 10000, // Adjust the maximum distance as needed (in meters)
+          $maxDistance: distance ?? 1000, // Adjust the maximum distance as needed (in meters)
         },
       };
     }
