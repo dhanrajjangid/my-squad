@@ -13,7 +13,7 @@ const searchPlayers = async (req, res) => {
         $near: {
           $geometry: {
             type: "Point",
-            coordinates: [latitude, longitude],
+            coordinates: [longitude, latitude],
           },
           $maxDistance: 10000, // Adjust the maximum distance as needed (in meters)
         },
