@@ -42,7 +42,6 @@ const updatePlayer = async (req, res) => {
       phoneNumber,
       state,
       city,
-      currentLocation,
     } = req.body;
 
 
@@ -56,7 +55,6 @@ const updatePlayer = async (req, res) => {
           phoneNumber,
           state,
           city,
-          currentLocation,
         },
       },
       { new: true }
