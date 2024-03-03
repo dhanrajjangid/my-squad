@@ -44,20 +44,17 @@ const addTeam = async (req, res) => {
 };
 
 
-const getTeams = async (req, res) => {
+const getTeamsByPlayerId = async (req, res) => {
   try {
-    let filter = {};
+    const playerId = req.params.player_id;
 
-    // Check if the 'status' query parameter is provided
-    if (req.query.status) {
-      // Assuming 'status' is a field in your team schema
-      filter.status = req.query.status;
-    }
+    // Use the playerId to filter teams where the admin key matches
+    const teams = await Team.find({ admin: playerId });
 
-    // Use the filter in the query
-    const teams = await Team.find(filter);
-
-    res.json(teams);
+    res.status(200).json({
+      success: true,
+      data: teams,
+    });
   } catch (error) {
     res
       .status(500)
@@ -103,4 +100,4 @@ const deleteTeam = async (req, res) => {
   }
 };
 
-module.exports = { addTeam, getTeams, updateTeam, deleteTeam };
+module.exports = { addTeam, getTeamsByPlayerId, updateTeam, deleteTeam };
