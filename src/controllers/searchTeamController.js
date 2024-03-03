@@ -2,23 +2,20 @@ const Team = require("../models/teamModel");
 
 const searchTeams = async (req, res) => {
   try {
-    const { category, location } = req.query;
+    const { latitude, longitude, distance } = req.query;
+
 
     let query = {};
 
-    if (category) {
-      query.category = category;
-    }
-
-    if (location) {
+    if (latitude && longitude) {
       // Check if location is provided before using it
-      query.location = {
+      query.currentLocation = {
         $near: {
           $geometry: {
             type: "Point",
-            coordinates: location.split(",").map(Number),
+            coordinates: [longitude, latitude],
           },
-          $maxDistance: 1000,
+          $maxDistance: distance ?? 1000, // Adjust the maximum distance as needed (in meters)
         },
       };
     }

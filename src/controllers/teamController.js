@@ -30,7 +30,7 @@ const addTeam = async (req, res) => {
       duration,
       capacity,
       admin: player_id,
-      location: {
+      currentLocation: {
         type: "Point",
         coordinates: currentLocation.coordinates,
       },

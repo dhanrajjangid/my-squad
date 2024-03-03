@@ -11,7 +11,7 @@ const footballTeamSchema = new mongoose.Schema({
   date: { type: Date, required: true },
   duration: { type: String, required: true },
   admin: {type: String, required: true},
-  location: {
+  currentLocation: {
     type: {
       type: String,
       enum: ["Point"],
@@ -28,7 +28,7 @@ const footballTeamSchema = new mongoose.Schema({
   members: [teamMemberSchema]
 });
 
-footballTeamSchema.index({ location: "2dsphere" });
+footballTeamSchema.index({ currentLocation: "2dsphere" });
 
 const Team = mongoose.model("FootballTeam", footballTeamSchema);
 
