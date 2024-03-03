@@ -1,31 +1,48 @@
 const Team = require("../models/teamModel");
+const Player = require("../models/playerModel");
 
 const addTeam = async (req, res) => {
   try {
-    const { name, overall_rating, city, category, players, location } =
-      req.body;
+    const { 
+      teamName,
+      venue,
+      date,
+      duration,
+      capacity,
+      player_id
+    } = req.body;
+
+    // Retrieve player details from the database
+    const player = await Player.findById(player_id);
+    
+    if (!player) {
+      return res.status(404).json({ message: "Player not found" });
+    }
+
+    // Extract location from the player document
+    const { currentLocation } = player;
 
     // Ensure location is provided as [longitude, latitude]
     const newTeam = new Team({
-      name,
-      overall_rating,
-      players,
-      category,
-      city,
+      teamName,
+      venue,
+      date,
+      duration,
+      capacity,
+      admin: player_id,
       location: {
         type: "Point",
-        coordinates: location,
+        coordinates: currentLocation.coordinates,
       },
     });
 
     await newTeam.save();
     res.json({ message: "Team added successfully", team: newTeam });
   } catch (error) {
-    res
-      .status(500)
-      .json({ message: "Failed to add team", error: error.message });
+    res.status(500).json({ message: "Failed to add team", error: error.message });
   }
 };
+
 
 const getTeams = async (req, res) => {
   try {
