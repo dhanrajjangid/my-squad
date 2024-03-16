@@ -3,18 +3,11 @@ const Player = require("../models/playerModel");
 
 const addTeam = async (req, res) => {
   try {
-    const { 
-      teamName,
-      venue,
-      date,
-      duration,
-      capacity,
-      player_id
-    } = req.body;
+    const { teamName, venue, date, duration, capacity, player_id } = req.body;
 
     // Retrieve player details from the database
     const player = await Player.findById(player_id);
-    
+
     if (!player) {
       return res.status(404).json({ message: "Player not found" });
     }
@@ -39,10 +32,34 @@ const addTeam = async (req, res) => {
     await newTeam.save();
     res.json({ message: "Team added successfully", team: newTeam });
   } catch (error) {
-    res.status(500).json({ message: "Failed to add team", error: error.message });
+    res
+      .status(500)
+      .json({ message: "Failed to add team", error: error.message });
   }
 };
 
+const getTeamById = async (req, res) => {
+  try {
+    const teamId = req.params.id;
+
+    // Find the team by ID in the database
+    const team = await Team.findById(teamId);
+
+    if (!team) {
+      return res.status(404).json({ message: "Team not found" });
+    }
+
+    // Return team details
+    res.status(200).json({
+      success: true,
+      data: team,
+    });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Internal Server Error", error: error.message });
+  }
+};
 
 const getTeamsByPlayerId = async (req, res) => {
   try {
@@ -100,4 +117,10 @@ const deleteTeam = async (req, res) => {
   }
 };
 
-module.exports = { addTeam, getTeamsByPlayerId, updateTeam, deleteTeam };
+module.exports = {
+  addTeam,
+  getTeamsByPlayerId,
+  updateTeam,
+  deleteTeam,
+  getTeamById,
+};
