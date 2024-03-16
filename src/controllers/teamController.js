@@ -40,6 +40,7 @@ const addTeam = async (req, res) => {
 
 const getTeamById = async (req, res) => {
   try {
+    console.log(req.params.id)
     const teamId = req.params.id;
 
     // Find the team by ID in the database
