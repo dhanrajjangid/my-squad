@@ -46,7 +46,7 @@ const getTeamById = async (req, res) => {
     const team = await Team.findById(teamId);
 
     if (!team) {
-      return res.status(404).json({ message: "Team not found" });
+      return res.status(404).json({ message: "Team not found!" });
     }
 
     // Return team details
